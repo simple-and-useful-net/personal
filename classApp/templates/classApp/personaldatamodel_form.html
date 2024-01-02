@@ -1,0 +1,95 @@
+{% extends 'classApp/base.html' %}
+
+{% block title %}
+    {{ title }}（個人情報）
+{% endblock %}
+
+{% block main %}
+    <!-- エラー表示 -->
+    {{ form.errors }}
+
+    {% comment %}    
+    <hr>
+    <h2>as_p</h2>
+    {{form.as_p |cut:"<div>"|cut:"</div>" }}
+
+    <hr>
+    <h2>as_ul</h2>
+    <!-- olにすると番号が付く -->
+    <ul>
+        {{form.as_ul }}
+    </ul>
+
+    <hr>
+    <h2>as_table</h2>
+    <table class ="table">
+        {{form.as_table |cut:"<div>"|cut:"</div>" }}
+        {# {{form.as_table }} #}
+    </table>
+    {% endcomment %}    
+
+
+
+    <!-- ブラウザーの検証を無効にするので novalidate属性を指定     -->
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <table class ="table">
+            {% for fld in form %}    
+                <tr>
+                    <td>{{ fld.label }}</td>
+
+                    {% if fld.auto_id == "id_sex" or fld.auto_id == "id_hobby" %}
+                        <td>{{ fld |cut:"<div>"|cut:"</div>" }}</td>
+                    {% else %}
+                        <td>{{ fld }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+
+    {% comment ループを使わない %}
+        <table class ="table">
+            <tr>
+                <td>{{form.name.label}}</td>
+                <td>{{form.name}}</td>
+            </tr>
+
+            <tr>
+                <td>{{form.sex.label}}</td>
+                <td>
+                    {% for radiobutton in form.sex %}
+                        {{ radiobutton }}
+                    {% endfor %}
+                </td>
+            </tr>
+
+            <tr>
+                <td>{{form.prefecture.label}}</td>
+                <td>{{form.prefecture}}</td>
+            </tr>
+
+            <tr>
+                <td>{{form.hobby.label}}</td>
+                <td>
+                    {{ form.hobby |cut:"<div>"|cut:"</div>" }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>{{form.food.label}}</td>
+                <td>{{form.food}}</td>
+            </tr>
+
+            <tr>
+                <td>{{form.hobby10.label}}</td>
+                <td>{{form.hobby10}}</td>
+            </tr>
+
+        </table>
+    {% endcomment  %}
+
+    <a href="{% url 'list_url' %}" class="btn btn-secondary">戻る</a>
+    <input class="btn btn-primary" type="submit" value={{title}}>
+</form>
+{% endblock %}
