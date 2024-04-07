@@ -1,7 +1,7 @@
 クラスベースのビュー
 
 個人情報
-モデル
+(モデル)
 
     name = models.CharField( max_length=20 )
     tel = models.CharField( max_length=11, 
