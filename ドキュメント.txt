@@ -1,2 +1,15 @@
 クラスベースのビュー
 
+個人情報
+モデル
+
+    name = models.CharField( max_length=20 )
+    tel = models.CharField( max_length=11, 
+                           validators=[tel_regex, MinLengthValidator(11)])
+    email = models.EmailField()
+
+    sex         = models.CharField( max_length=10 )
+    prefecture  = models.CharField( max_length=20 )
+    hobby       = models.JSONField()
+    food        = models.JSONField()
+
