@@ -44,6 +44,7 @@ def make_context( md, ctx ):
     return ctx
 
 
+
 # テンプレートのファイル名は、モデル名の小文字_???
 # ???_list.html
 # ???_detail.html
