@@ -10,6 +10,7 @@ from django. contrib. auth import authenticate, login ,logout
 from .models import PersonalDataModel 
 from .forms import  PersonalDataForm 
 
+
 def make_context( md, ctx ):
     
     # ラベル名の取得
