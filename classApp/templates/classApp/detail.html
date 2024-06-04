@@ -1,6 +1,6 @@
 
 {% comment %}
-<!-- 検証１（objectはイテレーティブか？） -->
+<!-- 検証1（objectはイテレーティブか？） -->
 検証１
 <table class ="table">
     {% for fld in object %}    
@@ -11,7 +11,7 @@
     {% endfor %}
 </table>
 
-<!-- 検証１（object.フィールド.label はあるか？） -->
+<!-- 検証2（object.フィールド.label はあるか？） -->
 検証2
 <table class="table">
     <tr>
@@ -24,6 +24,7 @@ end検証2
 {% endcomment %}
 
 
+<!-- objectを自分で作成 -->
 <table class="table">
     {% for fld in object2 %}    
         <tr>
@@ -32,31 +33,43 @@ end検証2
         </tr>
     {% endfor %}
 </table>
-
-
-
 {% comment %}
-    <table class="table">
-        <tr>
-            <td>名前</td>
-            <td>{{ object.name }}</td>
-        </tr>
-        <tr>
-            <td>性別</td>
-            <td>{{ object.sex }}</td>
-        </tr>
-        <tr>
-            <td>都道府県</td>
-            <td>{{ object.prefecture }}</td>
-        </tr>
+{% endcomment %}
 
-        <tr>
-            <td>趣味</td>
-            <td>{{ object.hobby|cut:"["|cut:"]" |cut:"'" }}</td>
-        </tr>
-        <tr>
-            <td>好物</td>
-            <td>{{ object.food |cut:"["|cut:"]" |cut:"'" }}</td>
-        </tr>
-    </table>
+
+
+<!-- 各フィールドを全て書く -->
+{% comment %}
+<table class="table">
+    <tr>
+        <td>名前</td>
+        <td>{{ object.name }}</td>
+    </tr>
+    <tr>
+        <td>電話番号</td>
+        <td>{{ object.tel }}</td>
+    </tr>
+    <tr>
+        <td>メール</td>
+        <td>{{ object.email }}</td>
+    </tr>
+
+    <tr>
+        <td>性別</td>
+        <td>{{ object.sex }}</td>
+    </tr>
+    <tr>
+        <td>都道府県</td>
+        <td>{{ object.prefecture }}</td>
+    </tr>
+
+    <tr>
+        <td>趣味</td>
+        <td>{{ object.hobby|cut:"["|cut:"]" |cut:"'" }}</td>
+    </tr>
+    <tr>
+        <td>好物</td>
+        <td>{{ object.food |cut:"["|cut:"]" |cut:"'" }}</td>
+    </tr>
+</table>
 {% endcomment %}
