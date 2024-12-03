@@ -1,5 +1,6 @@
 
 {% comment %}
+
 <!-- 検証1（objectはイテレーティブか？） -->
 検証１
 <table class ="table">
@@ -21,8 +22,11 @@
     </tr>
 </table>
 end検証2
+
 {% endcomment %}
 
+
+{% comment %}
 
 <!-- objectを自分で作成 -->
 <table class="table">
@@ -33,13 +37,13 @@ end検証2
         </tr>
     {% endfor %}
 </table>
-{% comment %}
+
 {% endcomment %}
 
 
 
 <!-- 各フィールドを全て書く -->
-{% comment %}
+
 <table class="table">
     <tr>
         <td>名前</td>
@@ -68,8 +72,10 @@ end検証2
         <td>{{ object.hobby|cut:"["|cut:"]" |cut:"'" }}</td>
     </tr>
     <tr>
-        <td>好物</td>
+        <td>食べ物</td>
         <td>{{ object.food |cut:"["|cut:"]" |cut:"'" }}</td>
     </tr>
 </table>
+
+{% comment %}
 {% endcomment %}

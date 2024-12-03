@@ -5,72 +5,78 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
 
-class PersonalDataForm(forms.ModelForm):
 
-    LABELS={
-            "id":       "ID",
-            "name":     "名前",
-            "tel":      "電話番号",
-            "email":    "メール",
-            "sex":      "性別",
-            "prefecture":"都道府県",
-            "hobby":    "趣味",
-            "food":     "食べ物",
-    }
+class PersonalDataForm(forms.ModelForm):
 
     SEX_CHOICES = [
         ('男', '男'),
         ('女', '女'),
     ]
     PREFECT_CHOICES = [
-        ('北海道', '北海道'),
-        ('東京都', '東京都'),
-        ('大阪府', '大阪府'),
+        ('北海道',     '北海道'),
+        ('東京都',     '東京都'),
+        ('大阪府',     '大阪府'),
     ]
     HOBBY_CHOICES = [
-        ('音楽', '音楽'),
-        ('映画', '映画'),
-        ('アウトドア', 'アウトドア'),
+        ('音楽',        '音楽'),
+        ('映画',        '映画'),
+        ('アウトドア',  'アウトドア'),
     ]
     FOOD_CHOICES = [
-        ('ラーメン', 'ラーメン'),
-        ('寿司', '寿司'),
-        ('カレー', 'カレー'),
+        ('ラーメン',    'ラーメン'),
+        ('寿司',        '寿司'),
+        ('カレー',      'カレー'),
     ]
 
-    # 性別、都道府県は複数選択が不可
+    # 性別、都道府県
     sex = forms.ChoiceField(choices=SEX_CHOICES, initial="男", 
                             widget=forms.RadioSelect())
     prefecture = forms.ChoiceField(choices=PREFECT_CHOICES, initial="東京都")
 
-    # 趣味、食べ物は複数選択が可能
+    # 趣味、食べ物 (複数選択が可能)
     hobby = forms.MultipleChoiceField(choices=HOBBY_CHOICES, 
                                       widget=forms.CheckboxSelectMultiple() )
     food  = forms.MultipleChoiceField(choices=FOOD_CHOICES )
 
     class Meta:
         model = PersonalDataModel
-        fields = "__all__"
-        # fields = ["name", "email", "sex", "prefecture", "hobby","food"]
-
-        # widgets = {
-        #     'sex':      forms.RadioSelect(),
-        # }
-        # フォームページに出力される名称
-        # labels={
-        #     "name":"名前",
-        #     "sex":"性別",
-        #     "prefecture":"都道府県",
-        # }
+        # fields = "__all__"
+        fields = [ "id", "name",  "tel", "email", "sex", "prefecture", "hobby","food"]
+        labels = {
+                    'id': 'ID',
+                    'name': '名前',
+                    'tel': '電話番号',
+                    'email': 'メール',
+                    'sex': '性別',
+                    'prefecture': '都道府県',
+                    'hobby': '趣味',
+                    'food': '食べ物',
+        }
 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.fields['id'] = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}))        
+        # フィールド順序を明示的に設定
+        self.fields = {
+            "id": self.fields["id"],
+            "name": self.fields["name"],
+            "tel": self.fields["tel"],
+            "email": self.fields["email"],
+            "sex": self.fields["sex"],
+            "prefecture": self.fields["prefecture"],
+            "hobby": self.fields["hobby"],
+            "food": self.fields["food"],
+        }
         # すべてのフィールドを指定
         for field_name, field in self.fields.items():
+            
             field.required = False  # フィールドのrequired属性をFalseに設定
-            field.label = PersonalDataForm.LABELS[field_name]
+            field.label = self.Meta.labels[field_name]
+            # field.label_suffix = '$'
+            field.label_suffix = ''
+            # print( "field.label_suffix", field.label_suffix  )
 
             # ラジオボタン、チェックボックスは
             # .form-check, .form-check-input, .form-check-label             
@@ -80,6 +86,12 @@ class PersonalDataForm(forms.ModelForm):
         # フィールドを指定して設定
         self.fields["name"].required = True
         self.fields['name'].widget.attrs['placeholder'] = '名前を入力してください'
+
+        self.fields['id'].widget.attrs = { 
+                        'disabled': 'disabled',
+                        # 'readonly': 'readonly',
+                        'class': 'form-control bg-light text-muted',  # Bootstrapクラス指定
+                        }
 
     """
     # モデルに保存
@@ -106,6 +118,7 @@ class PersonalDataForm(forms.ModelForm):
         return data        
     
 
+    """
     # すべての入力項目のチェックをしたい場合に使用
     # return時には「return self.cleaned_data」を返却が必要
     def clean( self ):
@@ -115,13 +128,14 @@ class PersonalDataForm(forms.ModelForm):
         print(data1, data2)
 
         return self.cleaned_data
-    """
 
 
 
 
+'''
+    以降のコードはテストで使用
 
-
+'''
 # hobby     = TestField(choices=HOBBY_CHOICES, widget=forms.CheckboxSelectMultiple(), label="Alphanumeric Field")
 # hobby2      = MultiEmailField(widget=forms.CharField(), label='趣味ABC')
 

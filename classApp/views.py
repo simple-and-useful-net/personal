@@ -11,36 +11,29 @@ from .models import PersonalDataModel
 from .forms import  PersonalDataForm 
 
 
-def make_context( md, ctx ):
+def make_context( ctx ):
     
-    # ラベル名の取得
-    labels= PersonalDataForm.LABELS
-
-    # フィールドの取得
-    fields = md._meta.get_fields()
-
-    # テンプレートファイルの引数
+    # リスト型変数の初期化
+    # リストの各値は、辞書型で設定される
     obj =[]
 
-    for field in fields:
-        # フィード情報の取得
-        field_name = field.name
+    # ラベル情報の取得
+    labels = PersonalDataForm._meta.labels
+
+    for field_name,lbl_name in labels.items():
+
+        # フィード値の取得
         field_value = getattr( ctx["object"], field_name)
+
+        # 取得値がリスト型（趣味、食べ物）はすべて結合して文字列にする
+        # （結合区切りとして「、」で結合）
+        if type(field_value) is list:
+            field_value = "、".join(field_value)
+            
+        obj.append( {"name": lbl_name, "value":field_value})
         print( f"{field_name}= {field_value}" )
 
-        # フィード名からラベル名に変換
-        lbl_name = ""
-        if field_name in labels:       
-            lbl_name = labels[field_name]
-
-        # データ型がlistなら、漢字カンマ区切に変換
-        value = field_value
-        if type(value) is list:
-            value = "、".join(value)
-            
-        obj.append( {"name": lbl_name, "value":value})
-    
-    
+    # テンプレート変数名をobject2に指定して設定
     ctx["object2"] = obj
     return ctx
 
@@ -55,12 +48,16 @@ def make_context( md, ctx ):
 class PersonalList( ListView ):
     model = PersonalDataModel 
 
+    #データベースに登録された順番
+    def get_queryset(self):
+        return super().get_queryset().order_by('id')
+        
 class PersonalDetail( DetailView ):
     model = PersonalDataModel 
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx =make_context( PersonalDataModel, ctx )
+        ctx =make_context( ctx )
         return ctx
 
 class PersonalDelete( DeleteView ): 
@@ -69,7 +66,7 @@ class PersonalDelete( DeleteView ):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx =make_context( PersonalDataModel, ctx )
+        ctx =make_context( ctx )
         return ctx
 
 
@@ -77,13 +74,13 @@ class PersonalCreate(CreateView):
     model = PersonalDataModel 
     form_class = PersonalDataForm
     success_url = reverse_lazy('list_url')
-    extra_context = {'title': '登録'}
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['label_suffix'] = ''
+        # kwargs['label_suffix'] = ''
         return kwargs    
 
+    extra_context = {'title': '登録'}
     # def get_context_data(self, **kwargs):
     #     ctx = super().get_context_data(**kwargs)
     #     ctx["title"] = "登録"
@@ -93,12 +90,12 @@ class PersonalUpdate(UpdateView):
     model = PersonalDataModel 
     form_class = PersonalDataForm
     success_url = reverse_lazy('list_url')
-    extra_context = {'title': '修正'}
 
+    extra_context = {'title': '修正'}
     # def get_context_data(self, **kwargs):
-    #     ctx = super().get_context_data(**kwargs)
-    #     ctx["title"] = "修正"
-    #     return ctx
+        # ctx = super().get_context_data(**kwargs)
+        # ctx["title"] = "修正"
+        # return ctx
 
 
 

@@ -6,88 +6,82 @@
 
 {% block main %}
     <!-- エラー表示 -->
-    {{ form.errors }}
+<!--
+    {{ form.errors }} 
+-->
 
-    {% comment %}    
-    <hr>
-    <h2>as_p</h2>
-    {{form.as_p |cut:"<div>"|cut:"</div>" }}
+<!--　{{ form.errors }}を使用した場合
 
-    <hr>
-    <h2>as_ul</h2>
-    <!-- olにすると番号が付く -->
+便利だが、レイアウトが決まっているしラベル名には対応していない
+（フィールド名が使われる）
+    
+
+●name
+    ・このフィールドは必須です。
+●email
+    ・有効なメールアドレスを入力してください。
+●tel
+    ・この値が少なくとも 11 文字以上であることを確認してください (10 文字になっています)。
+-->    
+    
+<!-- エラーを次のようなフォーマットで表示させる
+
+<li>{{ field.label }}: {{ error }}</li>
+ラベル名:エラー内容
+
+●名前: このフィールドは必須です。
+●電話番号: この値が少なくとも 11 文字以上であることを確認してください (10 文字になっています)。
+●メール: 有効なメールアドレスを入力してください。
+3件のエラーがあります。
+
     <ul>
-        {{form.as_ul }}
+    {% for field in form %}
+        {% if field.errors %}
+                {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}            
+        {% endif %}
+    {% endfor %}
+    </ul>
+    
+-->
+
+
+    
+
+    <!-- エラーをレイアウトして表示 -->
+    <ul>
+    {% for field in form %}
+        {% for error in field.errors %}
+            <li>{{ field.label }}: {{ error }}</li>
+        {% endfor %}            
+    {% endfor %}
     </ul>
 
-    <hr>
-    <h2>as_table</h2>
-    <table class ="table">
-        {{form.as_table |cut:"<div>"|cut:"</div>" }}
-        {# {{form.as_table }} #}
-    </table>
-    {% endcomment %}    
+    <!-- エラー件数の表示 -->
+    {% if form.errors %}
+        <p class="error-color"> {{ form.errors|length }} 項目にエラーがあります。</p>
+        <hr>
+    {% endif %}  
 
 
-
-    <!-- ブラウザーの検証を無効にするので novalidate属性を指定     -->
+   <!-- ブラウザーの検証を無効にするので novalidate属性を指定     -->
     <form method="POST" novalidate>
         {% csrf_token %}
 
-        <table class ="table">
-            {% for fld in form %}    
-                <tr>
-                    <td>{{ fld.label }}</td>
-
-                    {% if fld.auto_id == "id_sex" or fld.auto_id == "id_hobby" %}
-                        <td>{{ fld |cut:"<div>"|cut:"</div>" }}</td>
-                    {% else %}
-                        <td>{{ fld }}</td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-        </table>
-
-    {% comment ループを使わない %}
-        <table class ="table">
-            <tr>
-                <td>{{form.name.label}}</td>
-                <td>{{form.name}}</td>
-            </tr>
-
-            <tr>
-                <td>{{form.sex.label}}</td>
-                <td>
-                    {% for radiobutton in form.sex %}
-                        {{ radiobutton }}
-                    {% endfor %}
-                </td>
-            </tr>
-
-            <tr>
-                <td>{{form.prefecture.label}}</td>
-                <td>{{form.prefecture}}</td>
-            </tr>
-
-            <tr>
-                <td>{{form.hobby.label}}</td>
-                <td>
-                    {{ form.hobby |cut:"<div>"|cut:"</div>" }}
-                </td>
-            </tr>
-
-            <tr>
-                <td>{{form.food.label}}</td>
-                <td>{{form.food}}</td>
-            </tr>
-
-            <tr>
-                <td>{{form.hobby10.label}}</td>
-                <td>{{form.hobby10}}</td>
-            </tr>
-
-        </table>
-    {% endcomment  %}
+        <!--
+        ******************************************************* 
+            form_basic  基本
+            form_as     as_p,as_table などを使用
+            form_loop   ループ使用
+        ******************************************************* 
+        -->
+        {% comment %}
+            {% include 'classApp/form_basic.html'     %}
+            {% include 'classApp/form_as.html'        %}
+            {% include 'classApp/form_loop.html'      %}
+        {% endcomment %}
+            {% include 'classApp/form_as.html'        %}
 
     <a href="{% url 'list_url' %}" class="btn btn-secondary">戻る</a>
     <input class="btn btn-primary" type="submit" value={{title}}>

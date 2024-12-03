@@ -9,6 +9,29 @@
     {% bootstrap_javascript %}
 
     <title>個人情報</title > 
+
+    <style>
+        /* エラー文字の色  */
+        .error-color {
+            color: red;
+        }
+        /* エラーのフィールド名に記号を付加  */
+        .error-mark::before {
+            content: '※';
+            color: red;
+        }
+        /* 一覧のヘッダー項目    */
+        .custom-thead {
+            background-color: #d1e7ff;  /* 背景色 */
+            color: #333;                /* 文字色 */
+        }
+
+        /**
+        .table td {
+            width: 50%;
+        }
+        **/
+    </style>
 </head >
 
 <body>

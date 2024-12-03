@@ -1,0 +1,32 @@
+<table class ="table">
+    {% for fld in form %}
+        <!-- 登録の場合はIDは表示されない -->
+        {% if title == "登録" and fld.name != "id" or title == "修正" %}
+            <tr>
+                {% if fld.errors %}
+                    <!-- エラーの場合は、クラスを追加して、ラベルの前に赤いアスタリスクを付ける -->
+                    <td style="width: 30%;" class="error-mark">{{ fld.label }}</td>
+                 {% else %}
+                     <td style="width: 30%;">{{ fld.label }}</td>
+                 {% endif %}
+
+
+                <!-- 性別、趣味は、どちらも横に配置する   -->
+                {% if fld.auto_id == "id_sex" or fld.auto_id == "id_hobby" %}
+                    <td>{{ fld |cut:"<div>"|cut:"</div>" }}</div>
+                    </td>
+                {% else %}
+                    {% if fld.errors %}
+                        <!-- エラーの場合は、クラスを追加して、赤枠とエラーメッセージ -->
+                        <td class="form-control is-invalid">{{ fld }}
+                                <span class="error-color">{{ fld.errors }}</span>
+                                </td>
+                    {% else %}
+                        <td>{{ fld }}</td>
+                    {% endif %}
+                {% endif %}
+            </tr>
+
+        {% endif %}  
+    {% endfor %}
+</table>

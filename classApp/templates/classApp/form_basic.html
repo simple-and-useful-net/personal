@@ -1,0 +1,73 @@
+<table class ="table">
+    <tr>
+        <td>{{form.name.label}}</td>
+        <td>{{form.name}}</td>
+    </tr>
+
+    <tr>
+        <td>{{form.tel.label}}</td>
+        <td>{{form.tel}}</td>
+    </tr>
+    <tr>
+        <td>{{form.email.label}}</td>
+
+        {% if form.email.errors %}
+            <!-- エラーの場合は、クラスを追加して、赤枠とエラーメッセージ -->
+            <td class="form-control is-invalid">{{ form.email }}
+                    <span class="error-color">{{ form.email.errors }}</span>
+            </td>
+            
+        {% else %}
+            <td>{{ form.email }}</td>
+        {% endif %}
+        
+        
+    </tr>
+
+    <tr>
+        <td>{{form.sex.label}}</td>
+
+        <!-- ラジオボタンは縦に並ぶ-->
+        <!--
+        <td>
+            {{form.sex }}
+        </td>
+        -->
+        
+        <!-- ラジオボタン横並び　方法1-->
+        <!--
+        <td>
+            {{form.sex |cut:"<div>"|cut:"</div>"   }}</div>
+        </td>
+        -->
+        
+        <!-- ラジオボタン横並び　方法２-->
+        <td>
+            {% for radiobutton in form.sex %}
+                {{ radiobutton }}
+            {% endfor %}
+        </td>
+    </tr>
+
+    <tr>
+        <td>{{form.prefecture.label}}</td>
+        <td>{{form.prefecture}}</td>
+    </tr>
+
+    <tr>
+        <td>{{form.hobby.label}}</td>
+
+        <!-- checkbox 横並び-->
+        <td>
+            {{ form.hobby |cut:"<div>"|cut:"</div>" }}</div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>{{form.food.label}}</td>
+        <td>{{form.food}}</td>
+    </tr>
+
+  
+
+</table>
